@@ -1,0 +1,27 @@
+name: CI - Markdown Lint and Structure Check
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check file names are English only
+        run: |
+          echo "Checking for non-ASCII file names..."
+          if find . -name "*[ء-ي]*" | grep -q .; then
+            echo "❌ Found Arabic file names"
+            find . -name "*[ء-ي]*"
+            exit 1
+          fi
+          echo "✅ All file names are English"
+      - name: Validate structure
+        run: |
+          test -f README.md || (echo "README missing" && exit 1)
+          test -f LICENSE || (echo "LICENSE missing" && exit 1)
+          test -d prompts || (echo "prompts/ missing" && exit 1)
+          test -d templates || (echo "templates/ missing" && exit 1)
+          echo "✅ Structure valid"
