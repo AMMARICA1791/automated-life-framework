@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log*
+.env
+.env.local
+.DS_Store
+Thumbs.db
+GDRIVE_KEY
+service-account.json
+credentials.json
+GH_PAT
+dist/
+build/
+.tmp/
+*.log
+journal/private/
