@@ -22,3 +22,13 @@ We make stupid decisions not because we lack information, but because we contrad
 4. What did I say opposite a month ago?
 
 See full version in Drive.
+
+## 🔒 Phase 1 Privacy Hardening - Allowlist Mode
+
+The Google Drive synchronization source is restricted to one explicitly designated `public/` folder. Files outside that folder, including `journal/` and `journal/private/`, are not read by the synchronization script. Name-based exclusion remains an additional safeguard, not the primary privacy boundary.
+
+**Publication is disabled pending owner review.** The daily schedule is disabled, and the workflow's Git push step is disabled. No private decision journal should be published to this public repository.
+
+The public folder in Drive must be reviewed before any automatic publishing is enabled. The independent security test validates the path checks, but does not verify actual Drive content.
+
+An analytical report was described in the Phase 1 handoff, but its source contents have not yet been retrieved or published.
