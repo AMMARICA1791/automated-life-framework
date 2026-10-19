@@ -1,6 +1,6 @@
 name: Auto Sync from Google Drive
 on:
-  # Scheduled sync paused pending private-data security verification.
+  # Daily schedule intentionally disabled until live privacy audit and owner approval.
   workflow_dispatch:
 
 jobs:
@@ -14,21 +14,66 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install google-api-python-client google-auth google-auth-oauthlib
+        run: pip install google-api-python-client google-auth
+      - name: Privacy exclusion negative and positive tests
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          import tempfile
+          source = Path("docs/sync.py").read_text()
+          tree = ast.parse(source)
+          functions = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name in ("is_private_path", "is_private_folder_name", "audit_directory")]
+          namespace = {"Path": Path, "EXCLUDED_KEYWORDS": ("private", "خاص", "سري", "personal"), "DESTINATION": Path("hayat")}
+          exec(compile(ast.Module(body=functions, type_ignores=[]), "docs/sync.py", "exec"), namespace)
+          with tempfile.TemporaryDirectory() as temp:
+              root = Path(temp)
+              (root / "journal" / "private").mkdir(parents=True)
+              (root / "journal" / "private" / "test.md").write_text("private test")
+              try:
+                  namespace["audit_directory"](root)
+              except RuntimeError:
+                  print("SECURITY: negative test correctly rejected private file")
+              else:
+                  raise SystemExit("SECURITY: negative test FAILED")
+              (root / "journal" / "private" / "test.md").unlink()
+              (root / "journal" / "private").rmdir()
+              namespace["audit_directory"](root)
+              print("SECURITY: clean directory passed")
+          PY
       - name: Sync from Drive
         env:
           GDRIVE_KEY: ${{ secrets.GDRIVE_KEY }}
         run: |
+          test -n "$GDRIVE_KEY" || { echo "GDRIVE_KEY missing"; exit 1; }
           python docs/sync.py
-          echo "Sync completed"
-      - name: Commit and push if changed
+      - name: SECURITY AUDIT before staging
+        run: |
+          find hayat/ -type f
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          tree = ast.parse(Path("docs/sync.py").read_text())
+          functions = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name in ("is_private_path", "is_private_folder_name", "audit_directory")]
+          namespace = {"Path": Path, "EXCLUDED_KEYWORDS": ("private", "خاص", "سري", "personal"), "DESTINATION": Path("hayat")}
+          exec(compile(ast.Module(body=functions, type_ignores=[]), "docs/sync.py", "exec"), namespace)
+          namespace["audit_directory"](Path("hayat"))
+          PY
+          if find hayat/ -type d -iname '*private*' | grep -q .; then exit 1; fi
+          if find hayat/ -type f -iname '*private*' | grep -q .; then exit 1; fi
+          if find hayat/ -path '*journal/private*' | grep -q .; then exit 1; fi
+      - name: Stage and verify changes
         run: |
           git config user.name "Observer Bot"
           git config user.email "observer@automated-life-framework.local"
-          git add .
-          if git diff --staged --quiet; then
+          git add -- hayat/
+          if git diff --cached --name-only | grep -Ei 'private|خاص|سري|personal'; then
+            echo "SECURITY: excluded path staged"
+            exit 1
+          fi
+          if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "auto: sync from Drive $(date -u +%Y-%m-%d)"
+            git commit -m "auto: secure sync - private excluded"
             git push
           fi
