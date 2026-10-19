@@ -32,3 +32,12 @@ The Google Drive synchronization source is restricted to one explicitly designat
 The public folder in Drive must be reviewed before any automatic publishing is enabled. The independent security test validates the path checks, but does not verify actual Drive content.
 
 An analytical report was described in the Phase 1 handoff, but its source contents have not yet been retrieved or published.
+
+## Phase 2: Three Sages — Illustrative Tests Documented
+
+Ten hypothetical decisions are available for review:
+- [Narrative examples](docs/PHASE2-SAGES-TEST.md)
+- [Structured CSV](templates/decisions-test-10.csv)
+- [Results and methodological limitations](docs/PHASE2-RESULTS.md)
+
+The examples illustrate distinct fact-checking, evidence, and contradiction questions. The source report's 90% claim is **not an independently validated accuracy rate**. A controlled comparison with a simple review is still needed. Automatic Drive sync and publication remain disabled.
