@@ -1,0 +1,139 @@
+name: Security Test - Private Exclusion (Safe - No Drive Access)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  security-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🧪 Create fake hayat/ structure for testing
+        run: |
+          echo "=== Creating test structure ==="
+          mkdir -p hayat/docs
+          mkdir -p hayat/prompts
+          mkdir -p hayat/journal/private
+          echo "# Public doc" > hayat/docs/README.md
+          echo "# Sage" > hayat/prompts/01-sage-of-facts.md
+          echo "private test - should be caught" > hayat/journal/private/test-private.md
+          echo "personal notes" > hayat/my-personal-notes.md
+          echo ""
+          echo "Test files created:"
+          find hayat/ -type f | sort
+
+      - name: 🛡️ NEGATIVE TEST - Should FAIL when private exists
+        run: |
+          echo "=== NEGATIVE TEST - Expecting FAIL ==="
+          echo "Checking for private leaks..."
+          FOUND_PRIVATE=0
+          
+          if find hayat/ -type d -iname "*private*" | grep -q .; then
+            echo "Found private folder:"
+            find hayat/ -type d -iname "*private*"
+            FOUND_PRIVATE=1
+          fi
+          
+          if find hayat/ -type f -iname "*private*" | grep -q .; then
+            echo "Found private file:"
+            find hayat/ -type f -iname "*private*"
+            FOUND_PRIVATE=1
+          fi
+          
+          if find hayat/ -path "*journal/private*" | grep -q .; then
+            echo "Found journal/private path:"
+            find hayat/ -path "*journal/private*"
+            FOUND_PRIVATE=1
+          fi
+          
+          if find hayat/ -iname "*personal*" | grep -q .; then
+            echo "Found personal keyword:"
+            find hayat/ -iname "*personal*"
+            FOUND_PRIVATE=1
+          fi
+          
+          if [ $FOUND_PRIVATE -eq 1 ]; then
+            echo ""
+            echo "❌ NEGATIVE TEST: Correctly FAILED - Protection detected private (EXPECTED - GOOD!)"
+            echo "This proves security logic works - it catches private files"
+          else
+            echo "❌ NEGATIVE TEST: Should have failed but PASSED - Security logic broken!"
+            exit 1
+          fi
+
+      - name: 🧹 Clean private files
+        run: |
+          echo "=== Cleaning private files ==="
+          rm -rf hayat/journal/private
+          rm -f hayat/*private*
+          rm -f hayat/*personal*
+          echo "After cleaning:"
+          find hayat/ -type f | sort
+
+      - name: ✅ POSITIVE TEST - Should PASS when clean
+        run: |
+          echo "=== POSITIVE TEST - Expecting PASS ==="
+          echo "Checking for private leaks in clean folder..."
+          
+          if find hayat/ -type d -iname "*private*" | grep -q .; then
+            echo "❌ POSITIVE TEST FAILED - Found private folder after cleaning"
+            find hayat/ -type d -iname "*private*"
+            exit 1
+          fi
+          
+          if find hayat/ -type f -iname "*private*" | grep -q .; then
+            echo "❌ POSITIVE TEST FAILED - Found private file after cleaning"
+            exit 1
+          fi
+          
+          if find hayat/ -path "*journal/private*" | grep -q .; then
+            echo "❌ POSITIVE TEST FAILED - Found journal/private after cleaning"
+            exit 1
+          fi
+          
+          echo "✅ POSITIVE TEST PASSED - No private data in clean hayat/"
+          echo ""
+          echo "Final public files that would be pushed:"
+          find hayat/ -type f | sort
+
+      - name: 🔍 Test rsync exclusion
+        run: |
+          echo "=== Testing rsync exclusion (second layer) ==="
+          mkdir -p test_dest
+          # Recreate private to test rsync
+          mkdir -p hayat/journal/private
+          echo "private" > hayat/journal/private/secret.md
+          
+          echo "Running: rsync -av --exclude='*private*' --exclude='journal/private/' hayat/ test_dest/"
+          rsync -av --exclude='*private*' --exclude='journal/private/' hayat/ test_dest/
+          
+          echo ""
+          echo "Files copied to test_dest (should NOT contain private):"
+          find test_dest/ -type f | sort
+          
+          if find test_dest/ -path "*private*" | grep -q .; then
+            echo "❌ rsync test FAILED - private leaked through rsync"
+            exit 1
+          else
+            echo "✅ rsync test PASSED - private correctly excluded by rsync"
+          fi
+
+      - name: 📋 FINAL SECURITY REPORT
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "FINAL SECURITY REPORT - Safe Test Workflow"
+          echo "=========================================="
+          echo "Negative test (with private): Correctly FAILED - Protection works ✅"
+          echo "Positive test (clean): PASSED - Clean folder accepted ✅"
+          echo "rsync exclusion: PASSED - Second layer works ✅"
+          echo ""
+          echo "This proves:"
+          echo "1. Security logic detects private folders"
+          echo "2. Clean public files pass"
+          echo "3. rsync provides second layer of protection"
+          echo ""
+          echo "Note: This is a SAFE test - No Drive access, no personal data, no push"
+          echo "To test real Drive contents, run Auto Sync workflow with GDRIVE_KEY set"
+          echo "But for now, logic is verified in real GitHub Actions environment"
