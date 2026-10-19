@@ -1,4 +1,3 @@
-import io
 import json
 import os
 from pathlib import Path
@@ -8,7 +7,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-FOLDER_ID = "1esjXi0Lb8S8jeXYEPCb7BaN6zpqGe2n2"
+PUBLIC_FOLDER_ID = "1lwjUclr-Kecj87eoXConjkZslcEBFGZw"
 EXCLUDED_KEYWORDS = ("private", "خاص", "سري", "personal")
 DESTINATION = Path("hayat")
 
@@ -55,7 +54,7 @@ def download_folder(service, folder_id, destination):
                 raise RuntimeError("SECURITY: unsafe Drive file name")
             target = destination / name
             if is_private_folder_name(name) or is_private_path(target.relative_to(DESTINATION)):
-                print("SECURITY: Skipping private folder or file - stays in Drive only")
+                print("SECURITY: Skipping excluded file or folder")
                 continue
             if item["mimeType"] == "application/vnd.google-apps.folder":
                 target.mkdir(parents=True, exist_ok=True)
@@ -85,5 +84,7 @@ if __name__ == "__main__":
     if DESTINATION.exists():
         raise RuntimeError("SECURITY: hayat/ already exists; refusing to overwrite")
     DESTINATION.mkdir()
-    download_folder(get_drive_service(), FOLDER_ID, DESTINATION)
+    print("Only public/ will be published")
+    download_folder(get_drive_service(), PUBLIC_FOLDER_ID, DESTINATION)
     audit_directory()
+    print("Allowlisted files:", sorted(str(p.relative_to(DESTINATION)) for p in DESTINATION.rglob("*") if p.is_file()))
