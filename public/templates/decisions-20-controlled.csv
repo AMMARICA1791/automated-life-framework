@@ -1,0 +1,21 @@
+id,domain,what,why_now,worst_outcome,opposite_before,traditional_score,sages_score,benefit,key_bias,hidden_risk,actionable_next
+11,Financial,Buy $10k stock XYZ friend tip,FOMO friend made money round closing,Lose $10k and friendship,No tips without financials research,2,10,8,FOMO tip=valid,Friendship loss,Get 10-K P/E table
+12,Project,Rewrite codebase new framework,Current messy new framework trending,2 months rewrite new bugs delay,Refactor incrementally not rewrite,3,9,6,Hype=fact,New bugs delay,Measure lines bug count refactor one module test
+13,Career,Accept job 20% higher salary,Offer expires 3 days,Higher salary toxic culture longer commute regret,Balance over salary,2,8,6,Fear urgency,Culture toxic hidden,Glassdoor source date table salary after tax commute
+14,Relationship,Confront friend not inviting,Feeling hurt saw photos today,Damage friendship misunderstanding limited invites,Ask clarifying before confronting,3,9,6,Mind reading assumption,Damage over misunderstanding,Ask script limited invites how decide
+15,Time,Say yes 2h meeting collaboration,Don't want seem rude might be opportunity,Waste 2h no outcome delay important work,Decline meetings without clear agenda,2,8,6,Politeness pressure,Time waste hidden,Ask agenda expected outcome time cost table
+16,Financial,Buy crypto on hype,Hype price rising fear missing,Crash lose money,Not buy on hype without research,2,9,7,FOMO,Crash,Research whitepaper tokenomics table
+17,Project,Add feature users didn't ask,Think useful excited,Feature creep no users delay,Don't add without user request,3,8,5,Assumption useful,Delay,User interview source demand
+18,Career,Stay toxic job stability,Fear change stability,Stay miserable health impact,Leave toxic prioritize health,3,9,6,Sunk cost fear,Health impact hidden,Table health cost vs stability
+19,Relationship,Ghost friend,Conflict avoidance uncomfortable,Ghost damage trust,Communicate even hard,2,8,6,Avoidance,Trust damage,Script for hard conversation
+20,Health,Skip exercise for work,Deadline pressure,Health decline burnout,Exercise daily even busy,2,8,6,Short-term bias,Burnout hidden,Table exercise 30min vs burnout risk
+21,Financial,Lend money family,Guilt family pressure,No repayment family conflict,No lending without contract,3,9,6,Guilt,Family conflict hidden,Contract terms table repayment
+22,Project,Outsource core feature,Need help faster,Outsource bad quality lose control,Build core in-house,2,8,6,False assumption expertise,Quality loss hidden,Portfolio source references
+23,Career,Reject offer without negotiation,Fear negotiation awkward,Lose higher salary possible,Always negotiate,2,8,6,Fear negotiation,Salary loss hidden,Negotiation script research market
+24,Relationship,Make big promise emotional,Emotional high want please,Promise can't keep damage trust,No big promises when emotional,2,9,7,Emotional reasoning,Trust damage hidden,Wait 24h table feasibility
+25,Time,Multitask 3 projects,Overconfidence can handle,All 3 delayed low quality,Focus one at a time,3,9,6,Overconfidence,Quality delay hidden,Table focus vs multitask output
+26,Financial,Keep losing investment,Sunk cost already invested,Keep losing more,Cut losses set stop loss,3,9,6,Sunk cost,More loss hidden,Stop loss rule table
+27,Project,Perfect product before launch,Perfectionism fear judgment,Never launch no users feedback,Launch MVP iterate,2,8,6,Perfectionism,No feedback hidden,MVP checklist launch
+28,Career,Compare colleague path,Colleague promoted social comparison,Comparison demotivate wrong path,Own path based values,2,8,6,Social comparison,Wrong path hidden,Values table own goals
+29,Relationship,Assume intent without asking,Saw behavior assumed intent,Assume wrong damage relationship,Ask intent directly,2,9,7,Mind reading,Wrong assumption hidden,Ask intent script
+30,Health,Work 12h deadline,Deadline pressure need deliver,Burnout health damage mistakes,Work 8h sustainable,3,9,6,Short-term bias health risk hidden,Burnout mistakes hidden,Table 12h vs 8h sustainable output health
