@@ -7,6 +7,13 @@ from googleapiclient.http import MediaIoBaseDownload
 import subprocess
 import shutil
 
+EXCLUDED_FOLDERS = {'private', 'Private'}
+EXCLUDED_PATH_KEYWORDS = ['journal/private', 'private']
+
+def is_private_path(path):
+    parts = path.replace('\\', '/').lower().split('/')
+    return 'private' in parts or any(keyword in path.replace('\\', '/').lower() for keyword in EXCLUDED_PATH_KEYWORDS)
+
 # هذا السكريبت يعمل في GitHub Actions - يسحب من Drive ويدفع إلى GitHub
 # أنت لا تشغله يدوياً
 
@@ -24,6 +31,9 @@ def download_folder(service, folder_id, dest='.'):
     files = results.get('files', [])
     for f in files:
         path = os.path.join(dest, f['name'])
+        if is_private_path(path) or f['name'].lower() == 'private':
+            print('Skipping private folder - stays in Drive only')
+            continue
         if f['mimeType'] == 'application/vnd.google-apps.folder':
             os.makedirs(path, exist_ok=True)
             download_folder(service, f['id'], path)
