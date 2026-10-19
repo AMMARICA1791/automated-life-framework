@@ -21,7 +21,7 @@ jobs:
           wanted = {"is_private_path", "is_private_folder_name", "audit_directory"}
           nodes = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name in wanted]
           assert {n.name for n in nodes} == wanted, "Missing actual audit functions"
-          scope = {"Path": Path, "EXCLUDED_KEYWORDS": ("private", "خاص", "سري", "personal")}
+          scope = {"Path": Path, "EXCLUDED_KEYWORDS": ("private", "خاص", "سري", "personal"), "DESTINATION": Path("hayat")}
           exec(compile(ast.Module(body=nodes, type_ignores=[]), "docs/sync.py", "exec"), scope)
           with TemporaryDirectory() as tmp:
               root = Path(tmp) / "hayat"
