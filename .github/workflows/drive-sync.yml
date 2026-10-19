@@ -1,7 +1,6 @@
 name: Auto Sync from Google Drive
 on:
-  schedule:
-    - cron: '0 15 * * *'  # 12:00 BRT = 15:00 UTC
+  # Scheduled sync paused pending private-data security verification.
   workflow_dispatch:
 
 jobs:
