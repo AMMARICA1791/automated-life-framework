@@ -7,7 +7,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -41,6 +41,7 @@ jobs:
               namespace["audit_directory"](root)
               print("SECURITY: clean directory passed")
           PY
+      # Reads exclusively from the allowlisted Drive public/ folder.
       - name: Sync from Drive
         env:
           GDRIVE_KEY: ${{ secrets.GDRIVE_KEY }}
@@ -62,7 +63,9 @@ jobs:
           if find hayat/ -type d -iname '*private*' | grep -q .; then exit 1; fi
           if find hayat/ -type f -iname '*private*' | grep -q .; then exit 1; fi
           if find hayat/ -path '*journal/private*' | grep -q .; then exit 1; fi
-      - name: Stage and verify changes
+      # Publication is intentionally disabled until the owner reviews actual public/ contents.
+      - name: Stage and verify changes (DISABLED pending owner approval)
+        if: ${{ false }}
         run: |
           git config user.name "Observer Bot"
           git config user.email "observer@automated-life-framework.local"
@@ -74,6 +77,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "auto: secure sync - private excluded"
+            git commit -m "auto: allowlist sync from public/ only - Phase 1 privacy hardening"
             git push
           fi
