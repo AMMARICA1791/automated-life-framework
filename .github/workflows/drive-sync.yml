@@ -1,0 +1,35 @@
+name: Auto Sync from Google Drive
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 12:00 BRT = 15:00 UTC
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install google-api-python-client google-auth google-auth-oauthlib
+      - name: Sync from Drive
+        env:
+          GDRIVE_KEY: ${{ secrets.GDRIVE_KEY }}
+        run: |
+          python docs/sync.py
+          echo "Sync completed"
+      - name: Commit and push if changed
+        run: |
+          git config user.name "Observer Bot"
+          git config user.email "observer@automated-life-framework.local"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "auto: sync from Drive $(date -u +%Y-%m-%d)"
+            git push
+          fi
