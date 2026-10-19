@@ -41,3 +41,11 @@ Ten hypothetical decisions are available for review:
 - [Results and methodological limitations](docs/PHASE2-RESULTS.md)
 
 The examples illustrate distinct fact-checking, evidence, and contradiction questions. The source report's 90% claim is **not an independently validated accuracy rate**. A controlled comparison with a simple review is still needed. Automatic Drive sync and publication remain disabled.
+
+## Phase 3: Hypothetical Comparison — Data Reviewed (Validation Pending)
+
+- [20-decision dataset](templates/decisions-20-controlled.csv)
+- [Verified calculations and methodological limitations](docs/PHASE3-RESULTS.md)
+- [Controlled-test source document status](docs/PHASE3-CONTROLLED-TEST.md)
+
+The supplied 20 hypothetical decisions show a traditional-review mean of **2.4/10**, a three-sage mean of **8.6/10**, and a **+6.2-point descriptive difference**. These numbers are from the provided dataset, not independently validated evidence of effectiveness. Full scoring rubrics, paired review outputs, blinded independent evaluation, and real-world outcomes remain pending. The original detailed controlled-test document was not attached. Daily Drive sync and automatic GitHub publication remain disabled.
