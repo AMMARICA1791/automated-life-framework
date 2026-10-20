@@ -1,4 +1,30 @@
 # Automated Life Framework
+
+## ⚡ Prevent Regret in 5 Minutes — No App, No GitHub, No Signup
+
+Write four lines anywhere (paper, private notes, or an AI chat):
+
+1. **What will I do?** One sentence.
+2. **Why now?** The real reason.
+3. **What is the worst outcome I can tolerate?**
+4. **What did I say opposite a month ago?** Leave blank if unknown.
+
+Copy this into your AI assistant:
+
+> Analyze my four-line decision using three distinct lenses: **Facts** (which claims have reliable sources and dates, and which are unverified?), **Evidence** (which assumptions can be tested or quantified, without inventing numbers?), and **Contradiction** (what past commitment conflicts, and what new evidence might justify changing my mind?). Give each analysis separately, identify uncertainties, and suggest one practical next step. Do not make the decision for me.
+
+- [Start in 5 minutes](docs/QUICK-START.md)
+- [Examples in English, Portuguese, Arabic and Spanish](docs/EXAMPLES.md)
+- [Full public guide](docs/PHASE4-GLOBAL-GUIDE.md)
+
+**Privacy:** Do not paste confidential journals or sensitive personal information into public channels. This framework does not require submitting decisions to this repository.
+
+**Evidence note:** The reported +6.2-point difference is a descriptive comparison of 20 authored hypothetical examples, **not** verified improvement in real-world decisions or reduced regret. [See audit](docs/PHASE3-RESULTS.md).
+
+---
+
+## For Developers — Repository Details Below
+
 Observer-Only Regret Prevention System
 
 > Not a tool that brings news faster, but a mirror that prevents regret slowly.  
